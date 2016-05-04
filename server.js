@@ -26,13 +26,39 @@ function displayForm(res) {
 }
 
 function processFormFieldsIndividual(req, res) {
-    var fields = [];
+    var fields = {};
     var form = new formidable.IncomingForm();
     form.on('field', function(field,value) {
-        console.log(field);
-        console.log(value);
         fields[field] = value;
+        console.log(fields);
+    });
+    form.on('fileBegin', function(name,file) {
+        file.path = './temp/' + file.name ;
     })
+    form.on('file', function(name, file) {
+        console.log(name);
+        console.log(file);
+        fields[name] = file;
+    });
+    form.on('progress', function(bytesReceived, bytesExpected) {
+        var progress = {
+            type:'progress',
+            bytesReceived: bytesReceived,
+            bytesExpected: bytesExpected
+        }
+          console.log(progress);
+    });
+  
+    form.on('end', function() {
+        res.writeHead(200, {
+            'content-type': 'text/plain'
+        });
+        res.write('received the data: \n\n');
+        res.end(util.inspect({
+            fields: fields
+        }))
+    })
+    form.parse(req);
 }
 
 function processAllFieldsOfTheForm(req, res) {
@@ -46,7 +72,7 @@ function processAllFieldsOfTheForm(req, res) {
        res.end(util.inspect({
            fields: fields,
            files: files
-       }))
+       }, {colors:true}))
     });
 }
 
