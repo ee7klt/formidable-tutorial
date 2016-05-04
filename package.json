@@ -1,0 +1,15 @@
+{
+  "name": "forms-in-nodejs",
+  "version": "1.0.0",
+  "description": "How to use forms in Node.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: notest specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "KL Tah",
+  "license": "ISC",
+  "dependencies": {
+    "formidable": "^1.0.17"
+  }
+}
